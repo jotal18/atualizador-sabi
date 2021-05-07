@@ -109,9 +109,9 @@ def main():
                 main_window.un_hide()
 
         if event == '-ATUALIZA-' and not webview_window:
-            copy_paste()
-            # delete_shortcuts()
-            # copy_shortcuts()
+            # copy_paste()
+            delete_shortcuts()
+            copy_shortcuts()
 
     main_window.close()
 
