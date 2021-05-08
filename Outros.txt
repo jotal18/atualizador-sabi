@@ -1,0 +1,7 @@
+----- Executar script
+cd C:\Programação\Atualizador Sabi\atualizador-sabi
+main.py
+
+----- Erro VCRUNTIME140.dll
+Causa: está faltando o Microsoft Visual C++ 2015 -2019
+https://www.microsoft.com/pt-br/download/details.aspx?id=48145

@@ -1,1 +1,0 @@
-C:\Programação\Atualizador Sabi\atualizador-sabi>main.py

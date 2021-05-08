@@ -6,12 +6,33 @@ from pathlib import Path
 from unidecode import unidecode
 import sys
 
-# x86
+# Atalhos x86 criados em C:\Users\Public\Área de Trabalho Pública:
 # Controle Operacional.lnk
 # Atendimento Médico.lnk
 # Atendimento ao Cliente.lnk
 # Atualizador da Estação.lnk
-# C:\Users\Public\Área de Trabalho Pública
+
+# Pastas criadas em C:\Program Files (x86)\Sabi:
+# Atendimento ao Cliente
+# Atendimento Medico
+# atualizador
+# Controle Operacional
+# Manuais
+
+
+def copy_folder():
+    folder_source = 'C:\Program Files (x86)\Sabi'
+    folder_destination = 'C:\Program Files\Sabi'
+
+    errors = []
+    try:
+        if os.path.exists(folder_destination):
+            shutil.rmtree(folder_destination)
+        shutil.copytree(folder_source, folder_destination)
+    except OSError as err:
+        # errors.append((folder_source, folder_destination, str(err)))
+        # sg.popup_error(err, errors) 
+        sg.popup_error("Não foi possível atualizar o Sabi!!!") 
 
 def delete_shortcuts():
     shortcuts_x86 = [
@@ -37,21 +58,24 @@ def delete_shortcuts():
         'Sads (2).lnk',
         'Sads (3).lnk',
     ]
+
     folder_destination_desktop_public = r'C:\Users\Public\Desktop'
     folder_destination_desktop_user = os.path.join(str(Path.home()), 'Desktop')
 
     for shortcut_x86 in shortcuts_x86:
-        shortcuts_x86_list = [shortcut_x86.lower(), unidecode(shortcut_x86)] 
+        shortcuts_x86_list = [shortcut_x86.lower(), unidecode(shortcut_x86)]
         for shortcut_x86_list in shortcuts_x86_list:
-            file_destination_desktop_public = os.path.join(folder_destination_desktop_public, shortcut_x86_list)
-            file_destination_desktop_user = os.path.join(folder_destination_desktop_user, shortcut_x86_list)
+            file_destination_desktop_public = os.path.join(
+                folder_destination_desktop_public, shortcut_x86_list)
+            file_destination_desktop_user = os.path.join(
+                folder_destination_desktop_user, shortcut_x86_list)
 
             if os.path.exists(file_destination_desktop_public):
                 os.remove(file_destination_desktop_public)
 
             if os.path.exists(file_destination_desktop_user):
                 os.remove(file_destination_desktop_user)
-                
+
 
 def find_data_file():
     if getattr(sys, "frozen", False):
@@ -59,6 +83,16 @@ def find_data_file():
     else:
         datadir = os.path.dirname(__file__)
     return datadir
+
+
+def verify_folder_name(file):
+    file_name = file.split('.')
+    folder_source = 'C:\Program Files (x86)\Sabi'
+
+    if file_name[0] == 'Clinica Medica':
+        return os.path.join(folder_source, 'Atendimento Medico')
+
+    return os.path.join(folder_source, file_name[0])
 
 
 def copy_shortcuts():
@@ -69,8 +103,8 @@ def copy_shortcuts():
         for file in files:
             file_source = root + file
             file_destination = os.path.join(folder_destination, file)
-            shutil.copyfile(file_source, file_destination)
-
+            if os.path.exists(verify_folder_name(file)):
+                shutil.copyfile(file_source, file_destination)
 
 
 def make_main_window():
@@ -109,7 +143,7 @@ def main():
                 main_window.un_hide()
 
         if event == '-ATUALIZA-' and not webview_window:
-            # copy_paste()
+            copy_folder()
             delete_shortcuts()
             copy_shortcuts()
 
@@ -118,4 +152,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
